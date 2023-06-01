@@ -1,0 +1,185 @@
+Java Text RPG Gameplay i Mechanics
+
+Můžes si vybrat jednu ze tří postav
+Fanda
+Saska
+Vojta
+
+Fanda ma největší sílu, ale zbytek má nejmenší
+Saska má o trochu větší staminu, ale zbytek má střední
+Vojta má vše docela bídné, ale jeho magic je nejvyšší
+
+v souboji si můžete vybrat jestli použijete fight, magic, act
+něco k fightu:
+Můžete seknout, to ubere damage podle toho jakou máte weapon (pokud žádnou nemáte tak ubíráte raw strength)
+Můžete se bránit shieldem to dobijí staminu o 3 
+na použití seknutí potřebujete 5 staminy
+stamina nemůže přesáhnout víc jak 2* tvoji max.staminu
+
+Budete moci i critnout, to je vysvětlené in game
+
+Něco k magic
+
+Každá postava má jinou magic a odemyká ji na jiném levelu
+    {"Prayer","Heal"/*lvl2*/,"Villager´s Help"/*lvl7*/,}; //Fanda
+
+    {"Prayer","Heal"/*lvl2*/,"Villager´s Help"/*lvl6*/,"Spirit Kill" /*lvl9*/,"Speed Dash" /*lvl15*/}; //Saska
+
+    {"Prayer","Heal"/*lvl2*/,"Villager´s Help"/*lvl2*/,"Magic Shield"/*lvl5*/,"Sun´s Hand" /*lvl6*/,"Demon´s Hand" /*lvl10*/,"Thunder" /*lvl13*/}; //Vojta
+
+jak funguje
+kolik každá magic bere magiky je napsáno přímo ve hře.
+Prayer má 65% šanci na to že se stane něco špatného, např - 20 HP nebo dohealuje enemy atd.
+30% šanci na něco dobrého např. dohealuje vás nebo na konci souboji budete mít o 1 lvl navíc
+4% šanci na nedostání žádných levelů na konci souboje
+1% na infarkt, vaše hra tímto končí 
+je to nejvíc risky magic, ale je dostupná hned na levelu 1;
+
+Heal - vyhealuje 30 HP
+
+Villager´s Help
+spawne villager
+prvni kolo ubere 4 dmg
+druhe 8 dmg
+a treti 16 dmg
+dobré hlavně ze začátku
+
+exclusive Spirit Kill
+je to prakticky jako promluvení nebo dotek v actu
+ale když to použijete tak většinou se stane něco special
+funguje to na monstra na ktere promluvení ani dotek nejde.
+takže Eye //instavyhra, Parazit //instavyhra + - 10 max hp ale + 10 max strength, DeadWolf //instavyhra + 10 HP, Bigfish //instavyhra
+narozdil od actu dává coiny i levely
+
+exclusive Speed Dash
+je to nejsilnější stabilní raw damage (nepocitam suns hand a demons hand) move
+a zaroven i healovaci
+pokud se rozhodnete energii produit dál, tak vám dá 50 HP navíc bez ohledu kolik je vaše max hp
+pokud se rozběhnete
+ubere opponentovy 100 dmg
+
+exclusive Magic Shield
+vylepšený shield
+blokuje i status moves
+např: topení, infest, poison, atd..
+
+Sun´s Hand
+instakilluje opponenta pod Sluncem, nefunguje v jeskyňi
+
+Demonˇs Hand
+ubere bud 2/3 HP opponenta nebo 1/3 
+
+Thunder 
+má 1/3 šanci na to že opponenta trefí blesk
+ubere 50 a opponent nebude moci utocit na 3 kola
+1/3 sanci na to ze se blesk netrefi 
+a 1/3 sanci na to ze tě energie z blesku nabije
+a na tento souboj budes mit o 20 vetsi strength
+
+
+ACT
+Promluvení - Funguje na Witch, Zombie, Treant
+Dotek - funguje na BigSpidera 
+prakticky si je tím zpřátelíš a fight ukončís, nedostaneš levely, ale coiny pořád ano
+
+Poražení enemy
+po poražení enemy dostanete coins i lvl (pokud to nebylo actem), při zvýšení levelu si vyberete 1 ze 3 možností
+buď si zvýšíte maxhp +10 nebo maxstrength +2 nebo maxmagika +2
+
+Enemies -
+Eye,BigSpider,Witch,Parasite,DeadWolf,Zombie,Bigfish,Treant
++ Boss 
+Enemy Attacks
+
+Bouchnutí - ubere podle síly enemy co to použije, může critnout (2* damage)
+
+Stare - nic se neděje
+
+Venom - 3 kola po sobě ubírá 15 damage, pokud ale do sebe dostanete jeste více jedu tak ubírá o 2 damage více (stackuje se)
+
+Bite - funguje jako bouchnutí
+
+Hození Potionem - má šanci hodit 1 z 6 lektvaru
+jedovaty, funguje stejne jako venom
+slabý -1 HP
+střední -5 nebo - 20 HP
+nejhorší - 50 HP
+je šance že se enemy splete a hodí na Vás healovaci potion 
++ 40 HP
+
+Vyhealovaní 
+dohealuje 40 HP enemy, nemůže přejít přes počáteční HP
+
+Infestation
+enemy do tebe nejdříve vleze a pak po zbytek fightu se
+vám odebírá 5 HP
+pokud enemy použije tento move znovu už když je ve Vás
+tak se enemy dohealuje 10 HP
+a Vám odebere 10 HP
+
+Nakažení
+začne count down od 1 do 15
+pokud countdown reachne 15, zemřete
+
+Scratch ubíra 20 dmg
+
+Topení - enemy vás žačne do konce souboje topit, ubírá 20 dmg každé kolo
+
+Přerůstnutí - enemy si zvětšuje svoje HP o 20
+nemůže přesáhnout 400 HP
+
+Síla přirody
+kdyz enemy pouzije tento utok
+zacnou vámi prorůstat květiny
+pak malé stromečky
+nakonec růže 
+a pak se změníte ve stroj, zemřete.
+
+po tom co si odemknete menu tak můžete chodit do menu a odtamtud jít do shopu, checknout svoje stats, nebo farmit enemies
+toto můžete dělat kdykoli kdy nejste uprostřed souboje, nebo se neděje něco special
+
+v shopu který vlastná Nwela si můžete nakoupit
+
+Dřevěný meč za 35 coinů
+Železný meč za 80 coinů
+Revive za 20 coinů
+Modrý Zázvor za 40 coinů
+
+K itemům
+Modrý zázvor + 40 MaxHp - ve hře jsou účinky neznáme, je to pro to aby hráč experimentoval při nakupování, je to shop exclusive item
+Železný meč zvyšuje damage o 5
+Dřevěný meč zvyšuje damage o 1
+Zrezivělý meč zvyšuje damage o 3 a dá enemy tetanus (- 15 HP každé kolo), toto je item který se dá nalézt jen při random nalezení
+Hezky vypadající meč -2 damage, taky jen random nalezení
+Revive - když vás enemy zabije, tak vás nezabije ale budete dohealovani na 50 HP, revives můžete mít až kolik chcete
+vypne všechny status moves
+
+
+Random nalezení itemů
+máté šanci po fightu 1 z 10 že najdete item
+jsou to ty uvedené nahoře + ještě random počet coinů
+
+/SPOILERY
+ENDINGS
+
+Řekneš Kalimu ano a porazíš ho
+Dostaneš se zpět na povrch a podzemí se uzavře 1/4 ending
+GOOD ENDING
+
+Řekneš Kalimu ano a zabije tě při boss fightu
+Kali vyzabijí skoro celý povrch 2/4 ending
+WORST ENDING
+
+Řekneš Kalimu ne
+Změníš se v monstrum 3/4 ending
+BAD ENDING
+
+Řekneš Kalimu ne a máš revive
+vzbudí tě Nwela a žijete spolu v podzemí 4/4 ending, všichni ti prominou
+BEST ENDING
+
+Kali boss fight detaily tu psát nebudu, protože chci aby jste si jednotlivé endingy zkusili sami, ale má 2 exclusive moves
+Kali bouchnutí - ubírá 120 dmg
+Eternal Dream - tvoje HP se sníží o 50%
+
+Vytvořeno Michalem Carskou 
