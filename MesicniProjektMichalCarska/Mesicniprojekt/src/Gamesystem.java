@@ -56,9 +56,9 @@ public class Gamesystem {
 
     String[] optionthreemagic = {"Prayer","Heal"/*lvl2*/,"Villager´s Help"/*lvl2*/,"Magic Shield"/*lvl5*/,"Sun´s Hand" /*lvl6*/,"Demon´s Hand" /*lvl10*/,"Thunder" /*lvl13*/}; //Vojta
 
-    String[] lowerenemies = {"Eye","BigSpider", "Witch", "Parasite", "DeadWolf", "Zombie", "Bigfish", "Treant", "Kali"};
+    String[] lowerenemies = {"Eye","BigSpider", "Witch", "Parasite", "Treant", "Zombie", "Bigfish", "DeadWolf", "Kali"};
     //nastaveni postavy
-    int [] lowerenemiescoins = {5,15,20,5,15,10,40,50};
+    int [] lowerenemiescoins = {10,15,20,5,40,10,40,50};
     public void character(String name, int strength, int stamina,  int magika, int maxhp,  int lvl, int option){
         if (lvl > 0){
         System.out.println(whitebold + "Jméno: " + name + colorreset);
@@ -80,7 +80,12 @@ public class Gamesystem {
     int realrandomlowenemy = 0;
     //vygenerovani random enemy
     public void generatelowenemy(){
-        int generatedlowenemy = rd.nextInt(7);
+        int generatedlowenemy = 0;
+      if (lvlbetterthanten == 0){
+        generatedlowenemy = rd.nextInt(6);}
+      else if (lvlbetterthanten == 1){
+          generatedlowenemy = rd.nextInt(8);
+      }
         realrandomlowenemy -= realrandomlowenemy;
         realrandomlowenemy += generatedlowenemy;
     }
@@ -96,11 +101,12 @@ public class Gamesystem {
         System.out.println(green + "Počet revives: " + revivenumber + colorreset);
     }
     //útoky k jednotlivým enemies
-    String[][] lowattacks = {{/*Eye*/"Bouchnutí","Stare"}, {/*bigspider*/"Venom", "Bite"}, {/*Witch*/"Hození Potionem","Vyhealovani"},{/*Parasite*/"Infestation","Venom"},
-            {/*DeadWolf*/"Bite","Nakažení"}, {/*Zombie*/"Scratch","Nakažení"}, {/*Bigfish*/"Bouchnutí", "Topení"}, {/*Treeant*/"Síla přířody", "Přerůstnutí"} };
+    String[][] lowattacks = {{/*Eye*/"Bouchnutí","Stare"}, {/*Bigspider*/"Venom", "Bite"}, {/*Witch*/"Hození Potionem","Vyhealovani"},{/*Parasite*/"Infestation","Venom"},
+            {/*Treeant*/"Síla přířody", "Přerůstnutí"}, {/*Zombie*/"Scratch","Nakažení"}, {/*Bigfish*/"Bouchnutí", "Topení"}, {/*DeadWolf*/"Bite","Nakažení"} };
     //hp a síla enemies
+
     int[][] lowhpandlowstrength = {{/*eyeball*/90,30}, {/*bigspider*/150, 20}, {/*Witch*/140,50},{/*Parasite*/30,80},
-            {/*DeadWolf*/120,45}, {/*Zombie*/100,20}, {/*Bigfish*/200, 35}, {/*Treeant*/300, 50} };
+            {/*Treeant*/300, 50}, {/*Zombie*/100,20}, {/*Bigfish*/200, 35}, {/*DeadWolf*/120,45} };
     int lowstrength;
     int lowmaxhp;
 
@@ -141,13 +147,23 @@ public class Gamesystem {
         officialplace = place;
     }
     //lvl up
+    int lvlbetterthanten = 0;
+    int lvlbetterthantwenty = 0;
     public void levelup(){
         while (lvlgain > 0) {
             System.out.println("Vyberte si co si chcete zvýšit");
             System.out.println(yellow + "1. Max.Strength" + colorreset);
             System.out.println(green + "2. Max.HP" + colorreset);
             System.out.println(purple + "3. Max Magic" + colorreset);
-            int choose = scanner.nextInt();
+            int choose = 0;
+            while(true){try {
+                choose = scanner.nextInt();
+                break;
+            }catch (Exception e){
+                System.out.println(red + "Zadejte pouze číslo." + colorreset);
+                scanner.nextLine();
+            }
+                }
             switch (choose) {
                 case 1 -> {
                     System.out.println(yellow + "Vaše Max.Strength se zvyšuje o 2" + colorreset);
@@ -247,6 +263,15 @@ public class Gamesystem {
                     System.out.println(boldyellow + "+ " + obtaincoins + " coinů" + colorreset);
                     officiallvl += lvlgain;
                     System.out.println(boldcyan + "Váš level je teď " + officiallvl + colorreset);
+                    if (officiallvl >= 10){
+                        if (lvlbetterthanten == 0){
+                        System.out.println(purple + "Odemkl jste 2 nové enemies."  + colorreset);
+                            System.out.println(purple + "Deadwolf."  + colorreset);
+                            System.out.println(purple + "Bigfish" + colorreset);
+                            System.out.println(purple + "Můžete do nich vběhnout při farmění nebo při normal fightu."  + colorreset);
+
+                            lvlbetterthanten = 1;}
+                    }
                     break;
                 }
                 else {
@@ -301,17 +326,17 @@ public class Gamesystem {
                                }
                                case 4 -> {
                                    if (generatedattack == 0) {
-                                       bite();
+                                       silaprirody();
 
                                    } else {
-                                       nakazeni();
+                                       prerustnuti();
                                    }
                                }
                                case 5 -> {
                                    if (generatedattack == 0) {
                                        scratch();
                                    } else {
-                                       nakazeni();
+                                      nakazeni();
                                    }
                                }
                                case 6 -> {
@@ -323,9 +348,9 @@ public class Gamesystem {
                                }
                                case 7 -> {
                                    if (generatedattack == 0) {
-                                       silaprirody();
+                                       bite();
                                    } else {
-                                       prerustnuti();
+                                       nakazeni();
                                    }
 
                                }
@@ -367,8 +392,8 @@ public class Gamesystem {
                    }
                    if (drown > 0) {
                        System.out.println(boldblue + lowerenemies[realrandomlowenemy] + " vás topí");
-                       System.out.println(boldred + "- " + 10 + " HP" + colorreset);
-                       temporaryhp -= 10;
+                       System.out.println(boldred + "- " + 25 + " HP" + colorreset);
+                       temporaryhp -= 25;
                    } else {
                        shield = 0;
                    }
@@ -475,8 +500,17 @@ public class Gamesystem {
                     else {
                         System.out.println(".");
                     }
-            potentialcrit = scanner.nextInt();
-            potentialcrit--;
+                    while(true){
+                    try{potentialcrit = scanner.nextInt();
+                        potentialcrit--;
+                        break;
+                    }catch (Exception e){
+                        System.out.println(red + "Pište pouze čísla." + colorreset);
+                        scanner.nextLine();
+                    }
+                    }
+
+
         //možný crit
                     if (potentialcrit == critvalue){
                         System.out.println(underlineblue + "Uhodl jste to správně." + colorreset);
@@ -511,10 +545,10 @@ public class Gamesystem {
                 }
             }
                     while(madechoice == 0) {
-                        System.out.println(whitebold + "Strength(stackuje s weapon): " + calculateddamage + "\nMagic: " + temporarymagic + "\nStamina: " + temporarystamina +  "\nRevives: " + revivenumber + colorreset);
+                        System.out.println(whitebold + "Strength(stackuje s weapon): " + calculateddamage + "\nMagic: " + temporarymagic + "\nStamina: " + temporarystamina + "\nRevives: " + revivenumber + colorreset);
                         System.out.println(boldyellow + "Co budete dělat?" + colorreset);
                         System.out.println(yellow + "1. Fight \n2. Magic \n3. Act" + colorreset);
-
+                            try{
                         choices = scanner.nextInt();
                         if (choices == 1) {
                             System.out.println("1. Seknutí." + " - 5 Stamina");
@@ -683,21 +717,28 @@ public class Gamesystem {
                             //act
                         } else if (choices == 3) {
                             int talkchoice = 0;
-                            while (talkchoice == 0){
-                            System.out.println(green + "1. Promluvit" + colorreset);
-                            System.out.println(green + "2. Dotek" + colorreset);
-                            int innerchoice = scanner.nextInt();
-                            switch (innerchoice){
-                                case 1 -> {promluveni();
-                                    talkchoice++;
-                                    madechoice++;
+                            while (talkchoice == 0) {
+                                System.out.println(green + "1. Promluvit" + colorreset);
+                                System.out.println(green + "2. Dotek" + colorreset);
+                                int innerchoice = scanner.nextInt();
+                                switch (innerchoice) {
+                                    case 1 -> {
+                                        promluveni();
+                                        talkchoice++;
+                                        madechoice++;
+                                    }
+                                    case 2 -> {
+                                        dotek();
+                                        talkchoice++;
+                                        madechoice++;
+                                    }
                                 }
-                                case 2 -> {dotek();
-                                talkchoice++;
-                                    madechoice++;}
                             }
                         }
-                        }
+                        }catch (Exception e){
+                                System.out.println(red + "Zadejte pouze čísla." + colorreset);
+                                scanner.nextLine();
+                            }
 
 
                     }
@@ -1127,7 +1168,7 @@ public class Gamesystem {
                 officialmaxhp = 1;
             }
         }
-        else if (lowerenemies[realrandomlowenemy].equals(lowerenemies[4])){
+        else if (lowerenemies[realrandomlowenemy].equals(lowerenemies[7])){
             System.out.println("Pohladil jsi DeadWolfa.");
             System.out.println("Začal vrťet ocasem.");
             System.out.println("Urval si kus své kůže a dal ti ji jako ochranu");
@@ -1151,7 +1192,15 @@ public class Gamesystem {
         System.out.println(yellow + "Co chceš udělat?" + colorreset);
         System.out.println(green + "1. " + "Nechat energii proudit dál." + colorreset);
         System.out.println(yellowbright + "2. " + "Rozběhnout se na " + lowerenemies[realrandomlowenemy] + "." + yellowbright);
-        int choose = scanner.nextInt();
+        int choose = 0;
+        while(true){
+        try{
+            choose = scanner.nextInt();
+        break;}
+        catch (Exception e){
+            System.out.println(red + "Zadejte pouze čísla.");
+            scanner.nextLine();
+        }}
         switch (choose) {
             case 1 -> {
                 System.out.println(green + "Necháváš sebou proudit energii" + colorreset);
@@ -1188,7 +1237,7 @@ public class Gamesystem {
             didaction = 1;
         }
 
-        if (lowerenemies[realrandomlowenemy].equals(lowerenemies[7])){
+        if (lowerenemies[realrandomlowenemy].equals(lowerenemies[4])){
             System.out.println("Řekl jsi" + white + " Treantovi " + colorreset  +"že máš rád přírodu, a že se doma staráš o kytky");
             System.out.println(green + "Treant" + colorreset + " odešel.");
             lvlgain = 0;
@@ -1244,8 +1293,12 @@ public class Gamesystem {
                 shoporchar = scanner.nextLine();
                 if (shoporchar.equals("4")){
                     break;
+                }try{
+                checkShoporCharorFight();}
+                catch (Exception e){
+                    System.out.println(red + "Zadejte pouze čísla." + colorreset);
+                    scanner.nextLine();
                 }
-                checkShoporCharorFight();
             }
 
         }
@@ -1366,7 +1419,6 @@ public class Gamesystem {
                       officialmaxhp += 40;
                       line = scanner.nextLine();
                       System.out.println("Vaše Max.HP teď: " + officialmaxhp + colorreset);
-                      coins -= shopprices[3];
                   }
               } else if (buyitem == 4 && coins < shopprices[3]) {
                   System.out.println("Nemáte dostatek coinu.");

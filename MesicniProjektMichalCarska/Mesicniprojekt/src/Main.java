@@ -7,7 +7,6 @@ public class Main {
         System.out.println("Toto je TextRPG hra vytvořena Michalem Carskou, tato hra je pouze a schválně jen v hardcore difficulty, pokud zemřete tak musíte runnout Main znova a začít úplně od začátku.");
         System.out.println("Gameplay elementy a systémy jsou vysvětlené v dodatečném poznámkovém bloku.");
         System.out.println("Pokud chcete hrát hru jak byla určena tak se na info nedívejte.");
-        System.out.println("PS: Dávejte si pozor na to kdy se zadávaji čísla a kdy text, neni tu použito try/catch.");
         System.out.println("Napište cokoliv pro start hry");
         Gamesystem obj = new Gamesystem();
         Scanner scanner = new Scanner(System.in);
@@ -35,12 +34,20 @@ public class Main {
             System.out.println("1. " + obj.red + "Fanda" + obj.colorreset);
             System.out.println("2. " + obj.yellow + "Saska" + obj.colorreset);
             System.out.println("3. " + obj.purple + "Vojta" + obj.colorreset);
+            while (true){
+            try {
                 obj.option = scanner.nextInt();
-            switch (obj.option) {
-                case 1 -> obj.character("Fanda", 11, 5, 3, 170, 1, 1);
-                case 2 -> obj.character("Saska ", 6, 8, 5, 160, 1, 2);
-                case 3 -> obj.character("Vojta ", 5, 6, 9, 150, 1, 3);
-            }
+            break;}
+            catch(Exception e){
+                System.out.println(obj.red + "Zadejte pouze číslo." + obj.colorreset);
+                scanner.nextLine();
+            }}
+                switch (obj.option) {
+                    case 1 -> obj.character("Fanda", 11, 5, 3, 170, 1, 1);
+                    case 2 -> obj.character("Saska ", 6, 8, 5, 160, 1, 2);
+                    case 3 -> obj.character("Vojta ", 5, 6, 9, 150, 1, 3);
+                }
+
             if (obj.option == 1 || obj.option == 2 || obj.option == 3) {
 
 
