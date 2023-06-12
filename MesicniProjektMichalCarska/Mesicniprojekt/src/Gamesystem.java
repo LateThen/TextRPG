@@ -34,6 +34,7 @@ public class Gamesystem {
     String green = "\033[0;32m";
     String red = "\033[0;31m";
     String whitebold = "\033[1;97m";
+    String purplebold = "\033[1;35m";
     String blackbold = "\033[1;30m";
     String yellowbright = "\033[0;93m";
     String colorreset = "\033[0m";
@@ -56,7 +57,7 @@ public class Gamesystem {
 
     String[] optionthreemagic = {"Prayer","Heal"/*lvl2*/,"Villager´s Help"/*lvl2*/,"Magic Shield"/*lvl5*/,"Sun´s Hand" /*lvl6*/,"Demon´s Hand" /*lvl10*/,"Thunder" /*lvl13*/}; //Vojta
 
-    String[] lowerenemies = {"Eye","BigSpider", "Witch", "Parasite", "Treant", "Zombie", "Bigfish", "DeadWolf", "Kali"};
+    String[] lowerenemies = {"Eye","BigSpider", "Witch", "Parasite", "Treant", "Zombie", "Bigfish", "DeadWolf", "Cockatrice", "Kali"};
     //nastaveni postavy
     int [] lowerenemiescoins = {10,15,20,5,40,10,40,50};
     public void character(String name, int strength, int stamina,  int magika, int maxhp,  int lvl, int option){
@@ -112,6 +113,7 @@ public class Gamesystem {
 
     String lowenemyfirstattack;
     String lowenemysecondattack;
+    String lowenemythirdattack;
 
     int roundpoison = 0;
     int poisondmg = 0;
@@ -141,6 +143,7 @@ public class Gamesystem {
     int calculateddamage = 0;
     int didaction = 0;
     int itemwasfound;
+    int catsword = 0;
     public void groundlevel(int place){
         /*0 je podzemí*/
         /*1 je nadzemí*/
@@ -227,16 +230,17 @@ public class Gamesystem {
             System.out.println(" ");
         }
         else if (kaliboss == 1){
-            realrandomlowenemy = 8;
+            realrandomlowenemy = 9;
             System.out.println("Přistoupil k tobě " + boldred + theboss + colorreset);
             lowmaxhp = 1000;
             originallowmaxhp += lowmaxhp;
             lowstrength = 120;
             lowenemyfirstattack = "Po sobě jdoucí pěsti";
             lowenemysecondattack = "Kaliho Magie";
+            lowenemythirdattack = lowattacks[1][0];
             System.out.println("Strength: " + lowstrength);
             System.out.println("HP: " + lowmaxhp);
-            System.out.println("Attacks: " + lowenemyfirstattack + " a " + lowenemysecondattack + colorreset);
+            System.out.println("Attacks: " + lowenemyfirstattack + " , " + lowenemysecondattack + " a " + lowenemythirdattack + colorreset);
             System.out.println(" ");
         }
         temporarystrength = 0;
@@ -255,7 +259,12 @@ public class Gamesystem {
                 calculateddamage = temporarystrength += addedweapondamage;
             }
             int critvalue = rd.nextInt(3);
-           int generatedattack = rd.nextInt(1+1);
+
+           int generatedattack = 0;
+           if (kaliboss == 0){
+               generatedattack = rd.nextInt(2);}
+           else if (kaliboss == 1){
+               generatedattack = rd.nextInt(3);}
             if (lowmaxhp <= 0) {
                 if (kaliboss == 0) {
                     System.out.println("Porazil jsi " + whitebold + lowerenemies[realrandomlowenemy] + colorreset);
@@ -354,12 +363,15 @@ public class Gamesystem {
                                    }
 
                                }
-                               case 8 -> {
+                               case 9 -> {
                                    if (generatedattack == 0) {
                                        kalibouchnuti();
                                    }
-                                   else{
+                                   else if (generatedattack == 1){
                                        eternaldream();
+                                   }
+                                   else{
+                                       venom();
                                    }
                                }
                            }
@@ -539,20 +551,37 @@ public class Gamesystem {
                     temporarymagic -= temporarymagic;
                     temporarymagic += officialmagika;
                     System.out.println(purple + "Vaše magic je teď na max." + colorreset);
+                    scanner.nextLine();
+                    line = scanner.nextLine();
                 }
                 else {
                     System.out.println(purple + "Magic + "  + 2 + colorreset);
+                    scanner.nextLine();
+                    line = scanner.nextLine();
                 }
             }
                     while(madechoice == 0) {
-                        System.out.println(whitebold + "Strength(stackuje s weapon): " + calculateddamage + "\nMagic: " + temporarymagic + "\nStamina: " + temporarystamina + "\nRevives: " + revivenumber + colorreset);
+                        System.out.println(boldyellow + "Your turn!" + colorreset);
+                        if (potentialcrit == critvalue){
+                            System.out.println(boldcyan + "Strength: " + boldcyan + calculateddamage + colorreset);
+                        }
+                        else{
+                            System.out.println(whitebold + "Strength: " + calculateddamage + colorreset);
+                        }
+                        System.out.println(whitebold + "Magic: " + temporarymagic + colorreset + whitebold + "\nStamina: " + temporarystamina + colorreset);
+                        if (revivenumber > 0){
+                        System.out.println(white +"Revives: " + brightgreen +  revivenumber + colorreset);}
+                        else{
+                            System.out.println(whitebold +"Revives: " + revivenumber + colorreset);
+                        }
                         System.out.println(boldyellow + "Co budete dělat?" + colorreset);
-                        System.out.println(yellow + "1. Fight \n2. Magic \n3. Act" + colorreset);
+                        System.out.println(whitebold + "1. Fight" + purplebold + "\n2. Magic" +  brightgreen + "\n3. Act" + colorreset);
                             try{
                         choices = scanner.nextInt();
                         if (choices == 1) {
                             System.out.println("1. Seknutí." + " - 5 Stamina");
                             System.out.println("2. Bránit se shieldem.");
+                            System.out.println(boldyellow + "Stamina: " + temporarystamina + colorreset);
                             innerchoices = scanner.nextInt();
                             if (innerchoices == 1 && temporarystamina >= 5) {
                                 seknutimecem();
@@ -955,7 +984,7 @@ public class Gamesystem {
         if (lowmaxhp <= 400) {
             System.out.println(whitebold + lowerenemies[realrandomlowenemy] + colorreset + " vyrostl/a");
             lowmaxhp += 20;
-            System.out.println("Enemy HP je teď o 20 větší");
+            System.out.println(white + lowerenemies[realrandomlowenemy] + colorreset + " HP je teď o 20 větší");
         }
         else {
             System.out.println(whitebold + lowerenemies[realrandomlowenemy] + colorreset + " už nemůže více růst.");
@@ -967,6 +996,7 @@ public class Gamesystem {
         System.out.println(yellowbright + " - " + 5 + " Stamina" + colorreset);
         temporarystamina -= 5;
         System.out.println(yellow + lowerenemies[realrandomlowenemy] + " - " + calculateddamage + " HP" + colorreset);
+        catswordmoment();
         if (tetanus == 1){
             tetanuson = 1;
         }
@@ -976,6 +1006,93 @@ public class Gamesystem {
         System.out.println(boldblue + "Bráníš se štítem." + colorreset);
         shield = 1;
 
+    }
+    public void catswordmoment(){
+        if (catsword == 1){
+            int catswordoffandon = rd.nextInt(2);
+            if (catswordoffandon == 1){
+            int catswordchance = rd.nextInt(9);
+                System.out.println(purple + "Nwela ti pwomáhá :3");
+                scanner.nextLine();
+                line = scanner.nextLine();
+            if (catswordchance == 0){
+                System.out.println(yellow + "+ " + 1 + " revives" + colorreset);
+                line = scanner.nextLine();
+                revivenumber ++;
+            }
+            else if (catswordchance == 1){
+                System.out.println(green + " + " + 40 + " HP");
+                line = scanner.nextLine();
+                temporaryhp += 40;
+                if (temporaryhp > officialmaxhp){
+                    System.out.println("Tvoje HP je teď na maxu.");
+                    line = scanner.nextLine();
+                    temporaryhp = 0;
+                    temporaryhp += officialmaxhp;
+                }
+            }
+            else if (catswordchance == 2){
+                lvlgain = 4;
+                System.out.println(yellow + "Na konci souboje o 3 levely navíc" + colorreset);
+                line = scanner.nextLine();
+
+            }
+            else if (catswordchance == 3){
+                System.out.println(purple + "Nwela hitla " + lowerenemies[realrandomlowenemy] + colorreset);
+                System.out.println(yellow + lowerenemies[realrandomlowenemy] + " - " + "30 HP" + colorreset);
+                line = scanner.nextLine();
+                lowmaxhp -= 30;
+            }
+            else if (catswordchance == 4){
+                System.out.println(purple + "Nwela bouchla " + lowerenemies[realrandomlowenemy] + " pánvičkou. :3" +  colorreset );
+                System.out.println(yellow + lowerenemies[realrandomlowenemy] + " - " + "10 HP" + colorreset);
+                System.out.println(yellow + lowerenemies[realrandomlowenemy]  + " je paralizovaný/á" + colorreset);
+                line = scanner.nextLine();
+                lowmaxhp -= 10;
+                paralized ++;
+                }
+            else if (catswordchance == 5){
+                System.out.println(purple + "Nwela řízla "  + lowerenemies[realrandomlowenemy] + " kusem zrezivělé plechovky (od kočičího žrádla :33)" + colorreset);
+                System.out.println(yellow + lowerenemies[realrandomlowenemy]  + " - 5 HP" + colorreset);
+                lowmaxhp -= 5;
+                line = scanner.nextLine();
+                System.out.println(lowerenemies[realrandomlowenemy] + " dostal/a tetanus :0");
+                line = scanner.nextLine();
+                tetanuson = 1;
+            }
+            else if (catswordchance == 6){
+                System.out.println(purple + "Nwela se soustředí..." + colorreset);
+                line = scanner.nextLine();
+                int instakillchance = rd.nextInt(3);
+                if (instakillchance == 2){
+                    System.out.println("Nic si neviděl, bylo to moc rychlé ale enemy leží na zemi ???");
+                    line = scanner.nextLine();
+                    lowmaxhp -= lowmaxhp;
+                }
+                else {
+                    System.out.println("Nic se nestalo..");
+                    line = scanner.nextLine();
+                    System.out.println(purple + "Pwomiň :C" + colorreset);
+                    line = scanner.nextLine();
+                }
+            }
+            else if (catswordchance == 7){
+                System.out.println(purple + "Nwa!" + colorreset);
+                line = scanner.nextLine();
+                System.out.println(yellowbright + "+ 200" + " coins");
+                line = scanner.nextLine();
+                coins += 200;
+            }
+            else if (catswordchance == 8){
+                System.out.println(purple + "Nwela čaruje.." + colorreset);
+                System.out.println(yellow + lowerenemies[realrandomlowenemy]  + " - 50% HP" + colorreset);
+                line = scanner.nextLine();
+                int fiftypercentdown = lowmaxhp/2;
+                lowmaxhp -= fiftypercentdown;
+
+            }
+            }
+        }
     }
     //magic
     public void prayer(){ /*hodně procent*/
@@ -1275,7 +1392,7 @@ public class Gamesystem {
         haveshop++;
     }
     int[] shopprices = {35, 80, 20, 40,};
-    String[] shopexclusiveitems = {"Zázvor"};
+    String[] shopexclusiveitems = {"Zázvor","Kočičí Meč :3"};
     int beentoshop = 0;
     int obtaineditemone = 0;
     int obtaineditemtwo = 0;
@@ -1358,9 +1475,9 @@ public class Gamesystem {
                   if (line.equalsIgnoreCase("ano") || line.equals("1")) {
                       System.out.println("Koupil jsi si " + items[2] + "...");
                       line = scanner.nextLine();
-                      System.out.println(green + "Dřevěný meč +1 damage" + colorreset);
+                      System.out.println(green + "Dřevěný meč +3 damage" + colorreset);
                       coins -= shopprices[0];
-                      addedweapondamage = 1;
+                      addedweapondamage = 3;
                       currentlyequippedweapon = items[2];
                       tetanus = 0;
 
@@ -1379,9 +1496,9 @@ public class Gamesystem {
                   if (line.equalsIgnoreCase("ano") || line.equals("1")) {
                       System.out.println("Koupil jsi si " + items[1] + "...");
                       line = scanner.nextLine();
-                      System.out.println(green + "Tento meč je hodně dobrý, budete ubírat o 5 damage více." + colorreset);
+                      System.out.println(green + "Tento meč je hodně dobrý, budete ubírat o 10 damage více." + colorreset);
                       coins -= shopprices[1];
-                      addedweapondamage = 5;
+                      addedweapondamage = 10;
                       currentlyequippedweapon = items[1];
                       tetanus = 0;
 
@@ -1430,11 +1547,30 @@ public class Gamesystem {
               }
               if (buyitem == 5) {
                   System.out.println(yellow + "Želežný meč + " + 5 + " dmg" + colorreset);
-                  System.out.println(yellow + "Dřevěný meč + " + 1 + " dmg" + colorreset);
+                  System.out.println(yellow + "Dřevěný meč + " + 3 + " dmg" + colorreset);
                   System.out.println(green + "Revive" + " - oživí tě na 50 HP ve chvíli kdyby jsi měl umřít." + colorreset);
                   System.out.println(green + "Modrý zázvor" + " neznámé učinky.." + colorreset);
                   line = scanner.nextLine();
                   line = scanner.nextLine();
+              }
+              if (buyitem == 7 && coins >= 150){
+                  System.out.println("Opravdu si to chcete koupit ? :3" + " Ano/Ne nebo 1/2");
+                  scanner.nextLine();
+                  line = scanner.nextLine();
+                  System.out.println(purple + "Fwakt??" + colorreset);
+                  line = scanner.nextLine();
+                  if (line.equalsIgnoreCase("ano") || line.equals("1")) {
+                      System.out.println("Koupil jsi si " + purple +  shopexclusiveitems[1]  + colorreset + "...");
+                      coins -= 150;
+                      System.out.println(purple + "Kwoupwil jsi jswi Kočičí Mweč, tvoje damage +30 a při útoku mwáš šanci přivolat Nwelu (+1 revive, +40 HP, +3 levely na konci souboje, +30dmg, paralizování enemy, šance na instakill, +200 coins, ubrat 50% enemy HP, dát na enemy tetanus.)" + colorreset);
+                      addedweapondamage = 0;
+                      addedweapondamage +=30;
+                      tetanus = 0;
+                      currentlyequippedweapon = shopexclusiveitems[1];
+                      catsword = 1;
+                      line = scanner.nextLine();
+
+                  }
               }
 
           }}
@@ -1500,10 +1636,10 @@ public class Gamesystem {
                 if (line.equalsIgnoreCase("ano") || line.equals("1")) {
                     System.out.println("Vzal jsi si " + items[1] + "...");
                     line = scanner.nextLine();
-                    System.out.println(green + "Tento meč je hodně dobrý, budete ubírat o 5 damage více." + colorreset);
+                    System.out.println(green + "Tento meč je hodně dobrý, budete ubírat o 10 damage více." + colorreset);
                     line = scanner.nextLine();
                     pushConsole();
-                    addedweapondamage = 5;
+                    addedweapondamage = 10;
                     currentlyequippedweapon = items[1];
                     tetanus = 0;
                 }
@@ -1515,10 +1651,10 @@ public class Gamesystem {
                 if (line.equalsIgnoreCase("ano") || line.equals("1")) {
                     System.out.println("Vzal jsi si " + items[2] + "...");
                     line = scanner.nextLine();
-                    System.out.println(green + "Dřevěný meč +1 damage" + colorreset);
+                    System.out.println(green + "Dřevěný meč +3 damage" + colorreset);
                     line = scanner.nextLine();
                     pushConsole();
-                    addedweapondamage = 1;
+                    addedweapondamage = 3;
                     currentlyequippedweapon = items[2];
                     tetanus = 0;
                     //trisky
@@ -1530,10 +1666,10 @@ public class Gamesystem {
                 if (line.equalsIgnoreCase("ano") || line.equals("1")) {
                     System.out.println("Vzal jsi si " + items[3] + "...");
                     line = scanner.nextLine();
-                    System.out.println(yellowbright + "Zřezivělý meč ti zvyšuje damage +3 a zároveň má šanci na opponenta dát tetanus (ubira 15 damage každé kolo)" + colorreset);
+                    System.out.println(yellowbright + "Zřezivělý meč ti zvyšuje damage +6 a zároveň dá na opponenta tetanus (ubíra 15 damage každé kolo)" + colorreset);
                     line = scanner.nextLine();
                     pushConsole();
-                    addedweapondamage = 3;
+                    addedweapondamage = 6;
                     tetanus =1;
 
 
