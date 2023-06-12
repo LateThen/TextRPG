@@ -1,4 +1,14 @@
 # TextRPG
+<h2>1.1.1 Update (12.6.2023)</h2>
+<h3>-- Changes</h3>
+<p>- Changed UI colours</p>
+<h4>- Buffed swords</h4>
+<p>- Changed Iron Sword damage from 5 to 10</p>
+<p>- Changed Wooden Sword damage from 1 to 3</p>
+<p>- Changed Rusted Sword damage from 3 to 6 (tetanus without changes)</p>
+<h3>-- Added</h3>
+<p>- Added secret weapon and special effects related to it</p>
+<p>- Added stamina counter when selecting attacks</p>
 <h2>1.1.0 Update (10.6.2023)</h2>
 <h3>-- Bug Fixes</h3>
 <p>- Fixed Modrý zázvor price</p>
