@@ -59,7 +59,7 @@ public class Gamesystem {
 
     String[] lowerenemies = {"Eye","BigSpider", "Witch", "Parasite", "Treant", "Zombie", "Bigfish", "DeadWolf", "Cockatrice", "Kali"};
     //nastaveni postavy
-    int [] lowerenemiescoins = {10,15,20,5,40,10,40,50};
+    int [] lowerenemiescoins = {10,15,20,5,40,10,40,50,200};
     public void character(String name, int strength, int stamina,  int magika, int maxhp,  int lvl, int option){
         if (lvl > 0){
         System.out.println(whitebold + "Jméno: " + name + colorreset);
@@ -82,10 +82,13 @@ public class Gamesystem {
     //vygenerovani random enemy
     public void generatelowenemy(){
         int generatedlowenemy = 0;
-      if (lvlbetterthanten == 0){
+      if (lvlbetterthanten == 0 && lvlbetterthanfifteen == 0){
         generatedlowenemy = rd.nextInt(6);}
-      else if (lvlbetterthanten == 1){
+      else if (lvlbetterthanten == 1 && lvlbetterthanfifteen == 0){
           generatedlowenemy = rd.nextInt(8);
+      }
+      else if (lvlbetterthanfifteen == 1){
+          generatedlowenemy = rd.nextInt(9);
       }
         realrandomlowenemy -= realrandomlowenemy;
         realrandomlowenemy += generatedlowenemy;
@@ -103,11 +106,11 @@ public class Gamesystem {
     }
     //útoky k jednotlivým enemies
     String[][] lowattacks = {{/*Eye*/"Bouchnutí","Stare"}, {/*Bigspider*/"Venom", "Bite"}, {/*Witch*/"Hození Potionem","Vyhealovani"},{/*Parasite*/"Infestation","Venom"},
-            {/*Treeant*/"Síla přířody", "Přerůstnutí"}, {/*Zombie*/"Scratch","Nakažení"}, {/*Bigfish*/"Bouchnutí", "Topení"}, {/*DeadWolf*/"Bite","Nakažení"} };
+            {/*Treeant*/"Síla přířody", "Přerůstnutí"}, {/*Zombie*/"Scratch","Nakažení"}, {/*Bigfish*/"Bouchnutí", "Topení"}, {/*DeadWolf*/"Bite","Nakažení"}, {/*Cockatrice*/"Dračí Hněv", "Klobnutí", "Rychlost"}};
     //hp a síla enemies
 
     int[][] lowhpandlowstrength = {{/*eyeball*/90,30}, {/*bigspider*/150, 20}, {/*Witch*/140,50},{/*Parasite*/30,80},
-            {/*Treeant*/300, 50}, {/*Zombie*/100,20}, {/*Bigfish*/200, 35}, {/*DeadWolf*/120,45} };
+            {/*Treeant*/300, 50}, {/*Zombie*/100,20}, {/*Bigfish*/200, 35}, {/*DeadWolf*/120,45}, {/*Cockatrice*/700,110} };
     int lowstrength;
     int lowmaxhp;
 
@@ -144,6 +147,7 @@ public class Gamesystem {
     int didaction = 0;
     int itemwasfound;
     int catsword = 0;
+    int dragonswrathcount;
     public void groundlevel(int place){
         /*0 je podzemí*/
         /*1 je nadzemí*/
@@ -151,7 +155,7 @@ public class Gamesystem {
     }
     //lvl up
     int lvlbetterthanten = 0;
-    int lvlbetterthantwenty = 0;
+    int lvlbetterthanfifteen = 0;
     public void levelup(){
         while (lvlgain > 0) {
             System.out.println("Vyberte si co si chcete zvýšit");
@@ -190,6 +194,7 @@ public class Gamesystem {
     int kaliboss = 0;
     int obtaincoins;
     int lightningpowered;
+    int agility;
 
     //souboj
     public void lowFight(){
@@ -205,6 +210,7 @@ public class Gamesystem {
         temporarystamina = 0;
         temporarystamina += officialstamina;
         paralized = 0;
+        dragonswrathcount = 0;
         int potentialcrit;
         roundpoison = 0;
         poisondmg = 0;
@@ -215,6 +221,7 @@ public class Gamesystem {
         growth =  0;
         lvlgain = 1;
         tetanuson = 0;
+        agility = 0;
         //finalboss
         if (kaliboss == 0) {
             System.out.println("Vběhl/a do tebe " + whitebold + lowerenemies[realrandomlowenemy] + colorreset);
@@ -223,16 +230,23 @@ public class Gamesystem {
             lowstrength = lowhpandlowstrength[realrandomlowenemy][1];
             lowenemyfirstattack = lowattacks[realrandomlowenemy][0];
             lowenemysecondattack = lowattacks[realrandomlowenemy][1];
+            if (lvlbetterthanfifteen == 1 && realrandomlowenemy == 8){ //tohle pak smazat hochu
+                lowenemythirdattack = lowattacks[realrandomlowenemy][2];
+            }
             obtaincoins = lowerenemiescoins[realrandomlowenemy];
             System.out.println("Strength: " + lowstrength);
             System.out.println("HP: " + lowmaxhp);
-            System.out.println("Attacks: " + lowenemyfirstattack + " a " + lowenemysecondattack + colorreset);
+            if (lvlbetterthanfifteen == 1  && realrandomlowenemy == 8) { //tohle taky
+                System.out.println("Attacks: " + lowenemyfirstattack + " , " + lowenemysecondattack + " a " + lowenemythirdattack + colorreset);
+            }
+            else {
+            System.out.println("Attacks: " + lowenemyfirstattack + " a " + lowenemysecondattack + colorreset);}
             System.out.println(" ");
         }
         else if (kaliboss == 1){
             realrandomlowenemy = 9;
             System.out.println("Přistoupil k tobě " + boldred + theboss + colorreset);
-            lowmaxhp = 1000;
+            lowmaxhp = 3000;
             originallowmaxhp += lowmaxhp;
             lowstrength = 120;
             lowenemyfirstattack = "Po sobě jdoucí pěsti";
@@ -263,7 +277,7 @@ public class Gamesystem {
            int generatedattack = 0;
            if (kaliboss == 0){
                generatedattack = rd.nextInt(2);}
-           else if (kaliboss == 1){
+           if (kaliboss == 1 || realrandomlowenemy == 8){
                generatedattack = rd.nextInt(3);}
             if (lowmaxhp <= 0) {
                 if (kaliboss == 0) {
@@ -275,11 +289,18 @@ public class Gamesystem {
                     if (officiallvl >= 10){
                         if (lvlbetterthanten == 0){
                         System.out.println(purple + "Odemkl jste 2 nové enemies."  + colorreset);
-                            System.out.println(purple + "Deadwolf."  + colorreset);
+                            System.out.println(purple + "Deadwolf"  + colorreset);
                             System.out.println(purple + "Bigfish" + colorreset);
                             System.out.println(purple + "Můžete do nich vběhnout při farmění nebo při normal fightu."  + colorreset);
 
                             lvlbetterthanten = 1;}
+                    }
+                    if (officiallvl >= 15){
+                        if (lvlbetterthanfifteen == 0){
+                            System.out.println(purple + "Odemkl jste 1 novou enemy." + colorreset);
+                            System.out.println(purple + "Cockatrice" + colorreset);
+                            lvlbetterthanfifteen = 1;
+                        }
                     }
                     break;
                 }
@@ -362,6 +383,32 @@ public class Gamesystem {
                                        nakazeni();
                                    }
 
+                               }
+                               case 8 -> {
+                                   do{
+                                       if (agility > 0){
+                                           generatedattack = rd.nextInt(3);
+                                       }
+                                   if (generatedattack == 0) {
+                                       dragonswrath();
+                                       agility -= 1;
+                                       if (agility < 0){
+                                           agility = 0;
+                                       }
+                                   }
+                                   else if (generatedattack == 1) {
+                                       beak();
+                                       agility -= 1;
+                                       if (agility < 0){
+                                           agility = 0;
+                                       }
+                                   }
+                                   else {
+                                       agility();
+                                       agility = 2;
+                                   }
+                                   }
+                                   while (agility > 0);
                                }
                                case 9 -> {
                                    if (generatedattack == 0) {
@@ -570,7 +617,7 @@ public class Gamesystem {
                         }
                         System.out.println(whitebold + "Magic: " + temporarymagic + colorreset + whitebold + "\nStamina: " + temporarystamina + colorreset);
                         if (revivenumber > 0){
-                        System.out.println(white +"Revives: " + brightgreen +  revivenumber + colorreset);}
+                        System.out.println(whitebold +"Revives: " + brightgreen +  revivenumber + colorreset);}
                         else{
                             System.out.println(whitebold +"Revives: " + revivenumber + colorreset);
                         }
@@ -978,6 +1025,29 @@ public class Gamesystem {
             temporaryhp -= temporaryhp;
         }
         growth++;
+
+    }
+    public void dragonswrath(){
+        if (dragonswrathcount == 0){
+        System.out.println(whitebold + lowerenemies[realrandomlowenemy]  + boldcyan +  " se nadechuje.." + colorreset);
+        dragonswrathcount = 1;}
+        else if (dragonswrathcount == 1){
+            System.out.println(whitebold + lowerenemies[realrandomlowenemy]  + boldcyan +  " na tebe chrlí modrý oheň.." + colorreset);
+            System.out.println(boldred + "- " + 110 + " HP" + colorreset);
+            temporaryhp -= lowhpandlowstrength[realrandomlowenemy][1];
+            dragonswrathcount = 0;
+        }
+
+
+    }
+    public void beak(){
+        System.out.println(whitebold + lowerenemies[realrandomlowenemy]  + boldcyan +  " tě klobá" + colorreset);
+        System.out.println(boldred + "- " + 60 + " HP" + colorreset);
+        temporaryhp -= 60;
+
+    }
+    public void agility(){
+        System.out.println(whitebold + lowerenemies[realrandomlowenemy] + colorreset + yellow + " se zrychluje" + colorreset);
 
     }
     public void prerustnuti(){
@@ -1464,7 +1534,7 @@ public class Gamesystem {
               System.out.println("3. Revive: " + boldyellow + shopprices[2] + " coins" + colorreset);
               System.out.println("4. Modrý zázvor: " + boldyellow + shopprices[3] + " coins" + colorreset);
               System.out.println(whitebold + "5. Info" + colorreset);
-              System.out.println("6. Odejít.");
+              System.out.println(whitebold + "6. Odejít." + colorreset);
               System.out.println(boldyellow + "Máte " + coins + " coins" + colorreset);
               buyitem = scanner.nextInt();
               //drevenymec
@@ -1562,7 +1632,7 @@ public class Gamesystem {
                   if (line.equalsIgnoreCase("ano") || line.equals("1")) {
                       System.out.println("Koupil jsi si " + purple +  shopexclusiveitems[1]  + colorreset + "...");
                       coins -= 150;
-                      System.out.println(purple + "Kwoupwil jsi jswi Kočičí Mweč, tvoje damage +30 a při útoku mwáš šanci přivolat Nwelu (+1 revive, +40 HP, +3 levely na konci souboje, +30dmg, paralizování enemy, šance na instakill, +200 coins, ubrat 50% enemy HP, dát na enemy tetanus.)" + colorreset);
+                      System.out.println(purple + "Kwoupwil jsi jswi Kočičí Mweč, tvoje damage +30 a při útoku mwáš šanci přivolat Nwelu (random effect)" + colorreset);
                       addedweapondamage = 0;
                       addedweapondamage +=30;
                       tetanus = 0;

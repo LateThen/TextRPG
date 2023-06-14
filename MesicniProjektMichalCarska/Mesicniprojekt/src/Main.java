@@ -1,6 +1,7 @@
 
 import java.util.Locale;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 public class Main {
     public static void main(String[] args) {
@@ -43,7 +44,7 @@ public class Main {
                 scanner.nextLine();
             }}
                 switch (obj.option) {
-                    case 1 -> obj.character("Fanda", 11, 5, 3, 170, 1, 1);
+                    case 1 -> obj.character("Fanda", 15, 5, 3, 170, 1, 1);
                     case 2 -> obj.character("Saska ", 6, 8, 5, 160, 1, 2);
                     case 3 -> obj.character("Vojta ", 5, 6, 9, 150, 1, 3);
                 }
