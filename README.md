@@ -1,4 +1,12 @@
 # TextRPG
+<h2>1.1.2 Update (14.6.2023)</h2>
+<h3>-- Changes</h3>
+<p>- Changed Boss Stats</p>
+<p>- Boss now has 3 moves</p>
+<h3>-- Added</h3>
+<h2>- New enemy - Cockatrice</h2>
+<p>- can only be encountered after player has reached level 15, It´s a rare encounter and I´ts hard to beat, gives a big amount of coins</p>
+<p>- has 3 new moves</p>
 <h2>1.1.1 Update (12.6.2023)</h2>
 <h3>-- Changes</h3>
 <p>- Changed UI colours</p>
